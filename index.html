@@ -1,64 +1,787 @@
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <head>
-    <title>Hilbert Atrium | Associazione di Ricerca Matematica - Politecnico di Milano</title>
-    
-    <meta name="description" content="Hilbert Atrium è l'associazione studentesca del Politecnico di Milano dedicata alla ricerca matematica, statistical learning e calcolo scientifico. Unendo rigore e innovazione.">
-    
-    <meta name="keywords" content="Hilbert Atrium, Politecnico di Milano, Ingegneria Matematica, Ricerca Matematica, AI, Statistical Learning, Polimi">
-    
-    <meta name="author" content="PedrottiS">
-    </head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 40px auto; padding: 0 20px; }
-        header { border-bottom: 2px solid #005a9c; padding-bottom: 20px; margin-bottom: 30px; }
-        h1 { color: #005a9c; margin-bottom: 0; }
-        .tagline { font-style: italic; color: #666; }
-        .section { margin-bottom: 30px; }
-        footer { margin-top: 50px; font-size: 0.8em; color: #888; border-top: 1px solid #eee; padding-top: 20px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hilbert Atrium — Associazione di Ricerca Matematica · Polimi</title>
+<meta name="description" content="Hilbert Atrium è l'associazione studentesca del Politecnico di Milano dedicata alla ricerca matematica, statistical learning e calcolo scientifico.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=JetBrains+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+:root {
+  --bg:        #060a12;
+  --bg2:       #0c1220;
+  --bg3:       #111827;
+  --text:      #d9d0be;
+  --text-muted:#7a7060;
+  --gold:      #c4973d;
+  --gold-lt:   #e8c97a;
+  --blue:      #2d6fc4;
+  --blue-lt:   #5b9de8;
+  --border:    rgba(196,151,61,0.18);
+  --border-dim:rgba(255,255,255,0.06);
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans:  'Outfit', system-ui, sans-serif;
+  --mono:  'JetBrains Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── CANVAS ── */
+#bg-canvas {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; opacity: 0.35;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 3rem;
+  transition: background 0.4s, backdrop-filter 0.4s;
+}
+nav.scrolled {
+  background: rgba(6,10,18,0.82);
+  backdrop-filter: blur(14px);
+  border-bottom: 0.5px solid var(--border);
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--gold-lt);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.nav-logo span { font-weight: 300; font-style: italic; color: var(--text); }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold-lt); }
+.nav-cta {
+  font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.5rem 1.3rem; border: 0.5px solid var(--gold);
+  color: var(--gold); text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-cta:hover { background: var(--gold); color: var(--bg); }
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start;
+  padding: 8rem 3rem 4rem;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.72rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 2rem;
+  display: flex; align-items: center; gap: 1rem;
+}
+.hero-eyebrow::before {
+  content: ''; display: block;
+  width: 2.5rem; height: 0.5px; background: var(--gold);
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(4.5rem, 11vw, 10rem);
+  font-weight: 300;
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 0.2em;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold-lt);
+  display: block;
+}
+.hero-sub {
+  font-family: var(--serif);
+  font-size: clamp(1.1rem, 2.5vw, 1.65rem);
+  font-weight: 300; font-style: italic;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+  max-width: 38rem;
+  line-height: 1.5;
+}
+.hero-eq {
+  display: inline-block;
+  background: rgba(196,151,61,0.07);
+  border: 0.5px solid var(--border);
+  border-left: 2px solid var(--gold);
+  padding: 1rem 1.6rem;
+  margin-bottom: 3rem;
+  font-size: 1.05rem;
+}
+.hero-eq .katex { color: var(--text); }
+.hero-actions { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--bg);
+  font-family: var(--sans);
+  font-size: 0.82rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.85rem 2rem;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--gold-lt); }
+.btn-ghost {
+  display: inline-block;
+  border: 0.5px solid var(--border-dim);
+  color: var(--text-muted);
+  font-size: 0.82rem; font-weight: 400;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.85rem 2rem;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  color: var(--text-muted);
+  font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.2em;
+  text-transform: uppercase;
+  animation: pulse-scroll 2.5s ease-in-out infinite;
+}
+.hero-scroll::after {
+  content: ''; display: block;
+  width: 0.5px; height: 3rem; background: var(--text-muted);
+  animation: scroll-line 2.5s ease-in-out infinite;
+}
+@keyframes pulse-scroll { 0%,100%{opacity:0.4} 50%{opacity:0.9} }
+@keyframes scroll-line { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform:scaleY(1);transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+/* ── SECTION BASE ── */
+section { position: relative; z-index: 1; }
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.section-label::before {
+  content: attr(data-n);
+  font-size: 0.6rem; opacity: 0.5;
+}
+
+/* ── MANIFESTO ── */
+.manifesto {
+  padding: 7rem 3rem;
+  border-top: 0.5px solid var(--border-dim);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem; align-items: start;
+}
+.manifesto-left { }
+.manifesto-quote {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 300; font-style: italic;
+  line-height: 1.3; color: var(--text);
+  margin-bottom: 1.5rem;
+}
+.manifesto-quote strong {
+  font-weight: 600; color: var(--gold-lt);
+  font-style: normal;
+}
+.manifesto-attr {
+  font-family: var(--mono);
+  font-size: 0.72rem; letter-spacing: 0.15em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.manifesto-right { padding-top: 1rem; }
+.manifesto-right p {
+  font-size: 0.97rem; line-height: 1.85;
+  color: var(--text-muted); margin-bottom: 1.2rem;
+}
+.manifesto-right p strong { color: var(--text); font-weight: 500; }
+.inline-eq { display: inline-block; }
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  border-top: 0.5px solid var(--border-dim);
+  border-bottom: 0.5px solid var(--border-dim);
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.stat-item {
+  padding: 1.5rem 2rem;
+  border-right: 0.5px solid var(--border-dim);
+}
+.stat-item:last-child { border-right: none; }
+.stat-n {
+  font-family: var(--serif);
+  font-size: 3.5rem; font-weight: 300;
+  color: var(--gold-lt); line-height: 1;
+  margin-bottom: 0.4rem;
+}
+.stat-label {
+  font-size: 0.78rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+
+/* ── FOCUS AREAS ── */
+.focus {
+  padding: 7rem 3rem;
+  border-top: 0.5px solid var(--border-dim);
+}
+.focus-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem; margin-bottom: 4rem; align-items: end;
+}
+.focus-title {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 300; line-height: 1.1;
+}
+.focus-title em { font-style: italic; color: var(--gold-lt); }
+.focus-desc { font-size: 0.95rem; line-height: 1.8; color: var(--text-muted); }
+.focus-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5px;
+  background: var(--border-dim);
+}
+.focus-card {
+  background: var(--bg);
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  transition: background 0.3s;
+}
+.focus-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 2px; height: 0;
+  background: var(--gold);
+  transition: height 0.4s ease;
+}
+.focus-card:hover { background: var(--bg2); }
+.focus-card:hover::before { height: 100%; }
+.focus-card-num {
+  font-family: var(--mono);
+  font-size: 0.65rem; letter-spacing: 0.2em;
+  color: var(--text-muted); margin-bottom: 1.5rem;
+}
+.focus-card-title {
+  font-family: var(--serif);
+  font-size: 1.55rem; font-weight: 400;
+  color: var(--text); margin-bottom: 1rem;
+  line-height: 1.2;
+}
+.focus-card-body {
+  font-size: 0.88rem; line-height: 1.75;
+  color: var(--text-muted); margin-bottom: 1.5rem;
+}
+.focus-card-eq {
+  background: rgba(196,151,61,0.05);
+  border: 0.5px solid var(--border);
+  padding: 0.7rem 1rem;
+  font-size: 0.9rem;
+}
+.focus-card-tag {
+  display: inline-block;
+  margin-top: 1.2rem;
+  font-family: var(--mono);
+  font-size: 0.63rem; letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border-bottom: 0.5px solid var(--gold);
+  padding-bottom: 0.2rem;
+}
+
+/* ── RESEARCH PHILOSOPHY ── */
+.philosophy {
+  padding: 7rem 3rem;
+  border-top: 0.5px solid var(--border-dim);
+}
+.philosophy-header {
+  text-align: center; margin-bottom: 5rem;
+}
+.philosophy-title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300; font-style: italic;
+  margin-bottom: 1rem;
+}
+.phil-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+.phil-item { padding: 1.5rem 0; border-top: 0.5px solid var(--border-dim); }
+.phil-icon {
+  width: 2.4rem; height: 2.4rem;
+  border: 0.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 1rem;
+  color: var(--gold); margin-bottom: 1.2rem;
+}
+.phil-item-title {
+  font-family: var(--serif);
+  font-size: 1.2rem; font-weight: 400;
+  margin-bottom: 0.6rem;
+}
+.phil-item-body {
+  font-size: 0.87rem; line-height: 1.75;
+  color: var(--text-muted);
+}
+
+/* ── HIGHLIGHTED QUOTE ── */
+.pullquote-section {
+  padding: 5rem 3rem;
+  background: var(--bg2);
+  border-top: 0.5px solid var(--border-dim);
+  border-bottom: 0.5px solid var(--border-dim);
+  display: flex; align-items: center;
+  gap: 4rem;
+}
+.pullquote-eq {
+  flex: 0 0 auto;
+  font-size: 1.1rem;
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  padding: 1.8rem 2.2rem;
+  min-width: 280px;
+}
+.pullquote-text {
+  flex: 1;
+  font-family: var(--serif);
+  font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+  font-weight: 300; line-height: 1.45;
+  font-style: italic; color: var(--text);
+}
+.pullquote-text strong { color: var(--gold-lt); font-weight: 400; font-style: normal; }
+
+/* ── JOIN CTA ── */
+.join-section {
+  padding: 8rem 3rem;
+  border-top: 0.5px solid var(--border-dim);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4rem; align-items: center;
+}
+.join-title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 300; line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.join-title em { color: var(--gold-lt); font-style: italic; }
+.join-body { font-size: 0.95rem; line-height: 1.8; color: var(--text-muted); max-width: 36rem; }
+.join-action { display: flex; flex-direction: column; gap: 1rem; align-items: flex-end; }
+
+/* ── FOOTER ── */
+footer {
+  position: relative; z-index: 1;
+  border-top: 0.5px solid var(--border-dim);
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem; align-items: start;
+}
+.footer-brand { }
+.footer-logo {
+  font-family: var(--serif);
+  font-size: 1.2rem; color: var(--gold-lt); margin-bottom: 0.6rem;
+}
+.footer-tagline {
+  font-family: var(--mono);
+  font-size: 0.67rem; letter-spacing: 0.12em;
+  color: var(--text-muted); line-height: 1.6;
+}
+.footer-col h4 {
+  font-family: var(--mono);
+  font-size: 0.65rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 1rem;
+}
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 0.5rem; }
+.footer-col a {
+  font-size: 0.85rem; color: var(--text-muted);
+  text-decoration: none; transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--text); }
+.footer-bottom {
+  position: relative; z-index: 1;
+  border-top: 0.5px solid var(--border-dim);
+  padding: 1.5rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-bottom p {
+  font-family: var(--mono);
+  font-size: 0.65rem; letter-spacing: 0.1em; color: var(--text-muted);
+}
+
+/* ── REVEAL ANIMATION ── */
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 7rem 1.5rem 4rem; }
+  .manifesto, .focus-header { grid-template-columns: 1fr; gap: 2.5rem; }
+  .stats-strip { grid-template-columns: repeat(2,1fr); }
+  .stat-item:nth-child(2) { border-right: none; }
+  .focus-grid { grid-template-columns: 1fr; }
+  .phil-grid { grid-template-columns: 1fr; }
+  .pullquote-section { flex-direction: column; gap: 2rem; }
+  .pullquote-eq { min-width: unset; width: 100%; }
+  .join-section { grid-template-columns: 1fr; }
+  .join-action { align-items: flex-start; }
+  footer { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+  .manifesto, .focus, .philosophy, .pullquote-section, .join-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .stats-strip { padding: 2rem 1.5rem; }
+  footer { padding: 2rem 1.5rem; }
+  .footer-bottom { padding: 1rem 1.5rem; }
+}
+</style>
 </head>
 <body>
 
-<header>
-    <h1>Hilbert Atrium</h1>
-    <p class="tagline">A complete space for divergent ideas to converge.</p>
-</header>
+<canvas id="bg-canvas"></canvas>
 
-<div class="section">
-    <h2>Our Vision</h2>
-    <p>Inspirandoci alla teoria degli spazi di Hilbert, promuoviamo un dibattito accademico <strong>completo</strong> e <strong>separabile</strong>.</p>
-    <p>Definiamo il nostro spazio di ricerca come: $$\mathcal{HA} = \{ \text{Ideas} \mid \text{Rigorous} \wedge \text{Convergent} \}$$</p>
-</div>
-
-<div class="section">
-    <h2>Focus Areas</h2>
-    <ul>
-        <li>Statistical Learning & AI [cite: 4, 8]</li>
-        <li>Applied Mathematics Research [cite: 5, 10]</li>
-        <li>High-Performance Scientific Computing [cite: 10]</li>
-        <li>Quantum Mechanics Formalism [cite: 26]</li>
-    </ul>
-</div>
-<nav style="margin-bottom: 20px; padding: 10px 0; border-bottom: 1px solid #eee;">
-    <a href="index.html" style="margin-right: 15px; text-decoration: none; color: #005a9c; font-weight: bold;">Home</a>
-    <a href="research.html" style="margin-right: 15px; text-decoration: none; color: #005a9c;">Research</a>
-    <a href="statuto.html" style="text-decoration: none; color: #005a9c;">Statuto</a>
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#" class="nav-logo">Hilbert <span>Atrium</span></a>
+  <ul class="nav-links">
+    <li><a href="#manifesto">Missione</a></li>
+    <li><a href="#focus">Ricerca</a></li>
+    <li><a href="#philosophy">Filosofia</a></li>
+    <li><a href="research.html">Publications</a></li>
+    <li><a href="statuto.html">Statuto</a></li>
+  </ul>
+  <a href="#join" class="nav-cta">Unisciti</a>
 </nav>
 
-<footer>
-    <p>© 2026 Hilbert Atrium - Association at Politecnico di Milano[cite: 7]. <br>
-    Released under MIT License. Built with GitHub Pages.</p>
-</footer>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Politecnico di Milano &nbsp;·&nbsp; Ingegneria Matematica &nbsp;·&nbsp; Est. 2024</div>
+  <h1>Hilbert<br><em>Atrium</em></h1>
+  <p class="hero-sub">Uno spazio completo dove le idee divergenti convergono.</p>
+  <div class="hero-eq">
+    $$\mathcal{HA} = \overline{\operatorname{span}\left\{\,\varphi_n\,\right\}_{n \in \mathbb{N}}} \subset L^2(\Omega)$$
+  </div>
+  <div class="hero-actions">
+    <a href="#manifesto" class="btn-primary">Scopri la Missione</a>
+    <a href="#focus" class="btn-ghost">Aree di Ricerca</a>
+  </div>
+  <div class="hero-scroll">scroll</div>
+</section>
 
+<!-- MANIFESTO -->
+<section class="manifesto reveal" id="manifesto">
+  <div class="manifesto-left">
+    <div class="section-label" data-n="01">Manifesto</div>
+    <blockquote class="manifesto-quote">
+      Colmare il <strong>gap</strong> tra la bellezza astratta della matematica pura e il rigore della ricerca accademica.
+    </blockquote>
+    <p class="manifesto-attr">— Hilbert Atrium, Fondatori · 2024</p>
+  </div>
+  <div class="manifesto-right">
+    <p>
+      Ispirandoci alla teoria degli <strong>spazi di Hilbert</strong>, crediamo che la completezza non sia solo una proprietà topologica — è un ideale intellettuale. Ogni sequenza di Cauchy di idee deve avere un limite dentro di noi.
+    </p>
+    <p>
+      Il Politecnico di Milano forma ingegneri e scienziati d'eccellenza, ma spesso il dialogo tra matematica applicata, statistica moderna e ricerca pura rimane <strong>frammentato</strong>. Hilbert Atrium nasce per colmare questo vuoto.
+    </p>
+    <p>
+      Organizziamo seminari, reading groups, e collaborazioni con docenti e ricercatori. Crediamo che la comprensione profonda emerga solo quando la teoria incontra la pratica computazionale — quando $\nabla f = 0$ non è solo un simbolo, ma un punto critico che sai trovare.
+    </p>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip reveal">
+  <div class="stat-item">
+    <div class="stat-n">4</div>
+    <div class="stat-label">Aree di Ricerca Attive</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-n">∞</div>
+    <div class="stat-label">Dimensione dello Spazio delle Idee</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-n">L²</div>
+    <div class="stat-label">Lo Spazio in cui Operiamo</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-n">δ→0</div>
+    <div class="stat-label">La Nostra Convergenza</div>
+  </div>
+</div>
+
+<!-- FOCUS AREAS -->
+<section class="focus reveal" id="focus">
+  <div class="focus-header">
+    <div>
+      <div class="section-label" data-n="02">Aree di Ricerca</div>
+      <h2 class="focus-title">Dove la <em>teoria</em><br>incontra la realtà.</h2>
+    </div>
+    <p class="focus-desc">
+      Lavoriamo all'intersezione tra rigore formale e applicabilità concreta. Ogni area è un sottospazio denso del nostro spazio di ricerca totale.
+    </p>
+  </div>
+
+  <div class="focus-grid">
+
+    <div class="focus-card">
+      <div class="focus-card-num">01 ·</div>
+      <h3 class="focus-card-title">Statistical Learning & AI</h3>
+      <p class="focus-card-body">
+        Dallo studio teorico della dimensione di Vapnik–Chervonenkis alle architetture neurali moderne. Analizziamo la generalizzazione come problema rigoroso, non come black box.
+      </p>
+      <div class="focus-card-eq">$\mathcal{R}(f) \leq \hat{\mathcal{R}}(f) + \mathfrak{R}_n(\mathcal{F}) + \sqrt{\frac{\ln(1/\delta)}{2n}}$</div>
+      <span class="focus-card-tag">Teoria · Implementazione · Ricerca</span>
+    </div>
+
+    <div class="focus-card">
+      <div class="focus-card-num">02 ·</div>
+      <h3 class="focus-card-title">Matematica Applicata & PDE</h3>
+      <p class="focus-card-body">
+        Equazioni differenziali alle derivate parziali, analisi funzionale e metodi variazionali. Dalla formulazione debole agli schemi numerici stabili.
+      </p>
+      <div class="focus-card-eq">$-\Delta u = f \;\text{ in }\Omega, \quad u\big|_{\partial\Omega} = 0$</div>
+      <span class="focus-card-tag">Analisi · Elementi Finiti · Fisica</span>
+    </div>
+
+    <div class="focus-card">
+      <div class="focus-card-num">03 ·</div>
+      <h3 class="focus-card-title">High-Performance Scientific Computing</h3>
+      <p class="focus-card-body">
+        Algoritmi paralleli, calcolo GPU e ottimizzazione numerica. Perché un teorema vale davvero solo quando riesci a computarlo in tempo ragionevole.
+      </p>
+      <div class="focus-card-eq">$\mathbf{x}^{(k+1)} = \mathbf{x}^{(k)} - \alpha_k \nabla_{\mathbf{x}} \mathcal{L}(\mathbf{x}^{(k)})$</div>
+      <span class="focus-card-tag">HPC · CUDA · Julia / C++</span>
+    </div>
+
+    <div class="focus-card">
+      <div class="focus-card-num">04 ·</div>
+      <h3 class="focus-card-title">Quantum Mechanics Formalism</h3>
+      <p class="focus-card-body">
+        La meccanica quantistica come teoria degli spazi di Hilbert separabili. Operatori autoaggiunti, misure di von Neumann, e le fondamenta matematiche della fisica quantistica.
+      </p>
+      <div class="focus-card-eq">$i\hbar\,\frac{\partial}{\partial t}|\psi\rangle = \hat{H}|\psi\rangle$</div>
+      <span class="focus-card-tag">Fisica Matematica · Fondamenta</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- PULLQUOTE -->
+<div class="pullquote-section reveal">
+  <div class="pullquote-eq">
+    $$\left\| f - \sum_{k=1}^{n} \langle f, e_k \rangle e_k \right\|_{\mathcal{H}} \xrightarrow{n\to\infty} 0$$
+  </div>
+  <p class="pullquote-text">
+    Ogni funzione in $L^2$ può essere approssimata — <strong>arbitrariamente bene</strong> — da una combinazione di funzioni base. È la metafora perfetta per ciò che facciamo: costruire comprensione profonda, un coefficiente alla volta.
+  </p>
+</div>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy reveal" id="philosophy">
+  <div class="philosophy-header">
+    <div class="section-label" data-n="03" style="justify-content:center;">Filosofia</div>
+    <h2 class="philosophy-title">Come pensiamo alla ricerca</h2>
+  </div>
+  <div class="phil-grid">
+    <div class="phil-item">
+      <div class="phil-icon">∂</div>
+      <h3 class="phil-item-title">Rigore Prima di Tutto</h3>
+      <p class="phil-item-body">
+        Non accettiamo "sembra che funzioni". Vogliamo dimostrazioni, bound di complessità, convergenza garantita. Il rigore non è un ostacolo — è lo strumento che rende la conoscenza affidabile.
+      </p>
+    </div>
+    <div class="phil-item">
+      <div class="phil-icon">⊕</div>
+      <h3 class="phil-item-title">Interdisciplinarità Strutturata</h3>
+      <p class="phil-item-body">
+        La matematica non vive isolata. Creiamo ponti consapevoli tra analisi funzionale, statistica bayesiana, fisica matematica e informatica teorica — sempre mantenendo la coerenza formale.
+      </p>
+    </div>
+    <div class="phil-item">
+      <div class="phil-icon">λ</div>
+      <h3 class="phil-item-title">Colmare il Gap Università–Ricerca</h3>
+      <p class="phil-item-body">
+        I corsi insegnano i fondamentali. Noi costruiamo il ponte verso i paper pubblicati su Nature, JMLR, Annals of Mathematics. Leggiamo, discutiamo, replichiamo esperimenti.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section class="join-section reveal" id="join">
+  <div>
+    <div class="section-label" data-n="04">Unisciti</div>
+    <h2 class="join-title">Sei nello spazio<br>giusto per <em>convergere.</em></h2>
+    <p class="join-body">
+      Che tu stia seguendo Analisi III o stia scrivendo la tua tesi magistrale, Hilbert Atrium è aperto a tutti gli studenti di Ingegneria Matematica e corsi affini al Politecnico di Milano. La nostra unica richiesta: portare curiosità rigorosa.
+    </p>
+  </div>
+  <div class="join-action">
+    <a href="mailto:hilbertatrium@polimi.it" class="btn-primary">Contattaci</a>
+    <a href="statuto.html" class="btn-ghost">Leggi lo Statuto</a>
+    <p style="font-family:var(--mono);font-size:0.65rem;color:var(--text-muted);letter-spacing:0.1em;text-align:right;">hilbertatrium@polimi.it</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo">Hilbert Atrium</div>
+    <p class="footer-tagline">
+      Associazione Studentesca<br>
+      Politecnico di Milano<br>
+      Dipartimento di Matematica<br><br>
+      <em>"A complete space for<br>divergent ideas to converge."</em>
+    </p>
+  </div>
+  <div class="footer-col">
+    <h4>Navigazione</h4>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="statuto.html">Statuto</a></li>
+      <li><a href="#join">Contatti</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Risorse</h4>
+    <ul>
+      <li><a href="#">Reading Group</a></li>
+      <li><a href="#">Seminari</a></li>
+      <li><a href="#">GitHub</a></li>
+      <li><a href="https://www.polimi.it" target="_blank">Polimi</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2026 Hilbert Atrium · Politecnico di Milano · Released under MIT License</p>
+  <p>Built with GitHub Pages · KaTeX · Amore per la Matematica</p>
+</div>
+
+<script>
+// ── CANVAS BACKGROUND: animated parametric curves ──
+(function(){
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, t = 0;
+
+  function resize(){
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Draw a slow Lissajous-inspired field
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+
+    // Grid of faint dots
+    const spacing = 42;
+    const cols = Math.ceil(W/spacing)+1;
+    const rows = Math.ceil(H/spacing)+1;
+    ctx.fillStyle = 'rgba(196,151,61,0.18)';
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        const x = c*spacing;
+        const y = r*spacing;
+        const dist = Math.sin(x*0.008+t)*Math.cos(y*0.008+t*0.7);
+        const alpha = 0.08 + 0.12*Math.abs(dist);
+        ctx.globalAlpha = alpha;
+        ctx.beginPath();
+        ctx.arc(x, y, 1, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    // Flowing parametric curves
+    const curves = [
+      { a:3, b:2, phase:0,    col:'rgba(196,151,61,', ox:W*0.5, oy:H*0.4, r:Math.min(W,H)*0.22 },
+      { a:5, b:4, phase:0.8,  col:'rgba(45,111,196,',  ox:W*0.7, oy:H*0.6, r:Math.min(W,H)*0.14 },
+      { a:2, b:3, phase:1.5,  col:'rgba(196,151,61,',  ox:W*0.2, oy:H*0.7, r:Math.min(W,H)*0.10 },
+    ];
+
+    curves.forEach(cv => {
+      ctx.beginPath();
+      const steps = 600;
+      for(let i=0;i<=steps;i++){
+        const u = (i/steps)*Math.PI*2;
+        const x = cv.ox + cv.r * Math.sin(cv.a*u + cv.phase + t*0.12);
+        const y = cv.oy + cv.r * Math.cos(cv.b*u + t*0.08);
+        i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle = cv.col+'0.3)';
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
+    });
+
+    t += 0.004;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── NAV SCROLL ──
+(function(){
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+})();
+
+// ── REVEAL ON SCROLL ──
+(function(){
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  els.forEach(el => obs.observe(el));
+})();
+</script>
 </body>
 </html>
-
